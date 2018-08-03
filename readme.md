@@ -13,7 +13,7 @@ You can train on multiple GPUs by setting them with the `--num_gpus` flag, make 
 * To provide mask for occluded regions, we refined the bilinear sampler.py file.
 * Also, a flip-over training scheme has been added in our model. Due to the refinement of our architecture, the trainable parameters have doubled without slowing the inference speed. 
 * To better observe the evaluation process, we merge the testing process and training process. You can set `--bacth_per_eva` flag to set the evaluation intervals. 
-* Besides, to train on clusterings, we add the `--local_run_output`flag, which indicate the tensorboard logfile directory and evaluation output.
+* Besides, to train on clusterings, we add the `--log_directory`flag, which indicate the tensorboard logfile directory and evaluation output. We usually set it as `local_run_output` to train on clusterings.
 * As for the post-pocessing step, we have  post_process_disparity_old() function which is similar to Godard et al. We add an new post-pocesing function which simply average the disparty and flipped disparity of flipped image. 
 
 ## I just want to try it on an image!
@@ -51,6 +51,13 @@ The model's dataloader expects a data folder path as well as a list of filenames
 ```shell
 python monodepth_main.py --mode train --model_name my_model --data_path ~/data/KITTI/ \
 --filenames_file ~/code/monodepth/utils/filenames/kitti_train_files.txt --log_directory ~/tmp/
+```
+```shell
+python ./monodepth_warp_refine_v7/monodepth_main.py --mode train --model_name kitti --train_data_path /path/to/training/data/ \
+        --train_filenames_file ./monodepth_warp_refine_v7/utils/filenames/kitti_train_files.txt --test_data_path ./path/to/test/data/ \
+        --test_filenames_file ./monodepth_warp_refine_v7/utils/filenames/kitti_stereo_2015_test_files_png.txt --log_directory ./local_run_output \
+        --gt_path ./monodepth_warp_refine_v7/ --full_summary --retrain --encoder vgg \
+        --num_epochs 50
 ```
 You can continue training by loading the last saved checkpoint using `--checkpoint_path` and pointing to it:  
 ```shell
