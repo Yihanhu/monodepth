@@ -1,18 +1,21 @@
 # monodepth
 Tensorflow implementation of unsupervised single image depth prediction using a convolutional neural network.
 
-<p align="center">
-  <img src="http://visual.cs.ucl.ac.uk/pubs/monoDepth/monodepth_teaser.gif" alt="monodepth">
-</p>
-
 **Improved Unsupervised Monocular Depth Estimation with Left-Right Consistency**  
 Yihan.hu
 
 ## Requirements
 This code was tested with Tensorflow 1.0, CUDA 8.0 and Ubuntu 16.04.  
 Training takes about 30 hours with the default parameters on the **kitti** split on a single Titan X machine.  
-You can train on multiple GPUs by setting them with the `--num_gpus` flag, make sure your `batch_size` is divisible by `num_gpus`. Also, 
-To provide mask for occluded regions, we refined the bilinear sampler.py file. Also, a flip-over training scheme has been added in our model. Due to the refinement of our architecture, the trainable parameters have doubled without slowing the inference speed. To better observe the evaluation process, we merge the testing process and training process. You can set `--bacth_per_eva` flag to set the evaluation intervals. 
+You can train on multiple GPUs by setting them with the `--num_gpus` flag, make sure your `batch_size` is divisible by `num_gpus`.
+
+## Difference
+1.To provide mask for occluded regions, we refined the bilinear sampler.py file.
+2.Also, a flip-over training scheme has been added in our model. Due to the refinement of our architecture, the trainable parameters have doubled without slowing the inference speed. 
+3.To better observe the evaluation process, we merge the testing process and training process. You can set `--bacth_per_eva` flag to set the evaluation intervals. 
+4.Besides, to train on clusterings, we add the `--local_run_output`flag, which indicate the tensorboard logfile directory and evaluation output.
+5.As for the post-pocessing step, we have  post_process_disparity_old() function which is similar to Godard et al. We add an new post-pocesing function which simply average the disparty and flipped disparity of flipped image. 
+
 ## I just want to try it on an image!
 There is a simple mode `monodepth_simple.py` which allows you to quickly run our model on a test image.  
 Make sure your first [download one of the pretrained models](#models) in this example we will use `model_cityscapes`.
